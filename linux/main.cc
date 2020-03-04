@@ -46,6 +46,11 @@ int main(int argc, char **argv) {
   // Arguments for the Flutter Engine.
   std::vector<std::string> arguments;
 
+#ifdef NDEBUG
+    arguments.push_back("--disable-dart-asserts");
+    arguments.push_back("--disable-observatory");
+#endif
+
   flutter::FlutterWindowController flutter_controller(icu_data_path);
   flutter::WindowProperties window_properties = {};
   window_properties.title = kFlutterWindowTitle;
