@@ -26,7 +26,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Timer timer;
   DateTime startTime;
-  var duration = Duration(seconds: 5);
+  var duration = Duration(minutes: 5);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -91,13 +91,13 @@ class _MyHomePageState extends State<MyHomePage> {
     Map<String, String> envVars = Platform.environment;
     print(envVars['SNAP']);
     print(envVars['PWD']);
-    if (Platform.environment.containsValue('SNAP')) {
-      Process.run('aplay', ['gong.wav'], workingDirectory: envVars['SNAP']).then((result) {
-        stdout.write(result.stdout);
-        stderr.write(result.stderr);
-      });
-    }
+
+    Process.run('paplay', ['gong.wav'], workingDirectory: envVars['SNAP']).then((ProcessResult results) {
+      print(results.stdout);
+      print(results.stderr);
+    });
   }
+
   void gong() async {
     gongSound();
     var client = DBusClient.session();
@@ -108,7 +108,7 @@ class _MyHomePageState extends State<MyHomePage> {
       DBusString(''), // App name
       DBusUint32(0), // Replaces
       DBusString(''), // Icon
-      DBusString('Gong!'), // Summary
+      DBusString('The gong has gone bong, time to leave the stage!'), // Summary
       DBusString(''), // Body
       DBusArray(DBusSignature('s')), // Actions
       hints, // Hints
