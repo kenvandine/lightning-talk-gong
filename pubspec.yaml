@@ -1,5 +1,5 @@
-name: gong
-description: A new Flutter project.
+name: lightning_talk_gong
+description: Lightning Talk Gong
 version: 1.0.0+1
 
 environment:

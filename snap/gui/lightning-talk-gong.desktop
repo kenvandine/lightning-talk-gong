@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Lightning Talk Gong
+Comment=When the gong goes bong, stop talking!
+Icon=${SNAP}/meta/gui/lightning-talk-gong.png
+Exec=lightning-talk-gong %U
+Terminal=false
+Type=Application
+Categories=Utilities;
+Keywords=Flutter;Gong;
+StartupNotify=false

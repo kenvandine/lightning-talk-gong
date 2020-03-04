@@ -28,6 +28,9 @@ parts:
       set -eux
       snapcraftctl build
       git clone -b master https://github.com/flutter/flutter.git
+      cd flutter
+      git reset --hard bd182e3911e119724ccb1dc4910122b1d32f8d33
+      cd -
       flutter/bin/flutter config --enable-linux-desktop
       cp -r flutter $SNAPCRAFT_PART_INSTALL/
     build-packages:

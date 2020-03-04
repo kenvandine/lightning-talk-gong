@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Lightning Talk Gong',
       theme: ThemeData(primarySwatch: Colors.orange, fontFamily: 'Ubuntu'),
       home: MyHomePage(),
     );
@@ -31,7 +31,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Flutter Gong'),
+        title: Text('Lightning Talk Gong'),
       ),
       body: Center(
         child: Column(
