@@ -1,0 +1,55 @@
+name: lightning-talk-gong
+version: "0.1"
+summary: Lightning Talk Gong
+description: |
+  When the gong goes bong, stop talking!
+grade: stable
+confinement: strict
+base: core18
+
+architectures:
+  - build-on: amd64
+
+apps:
+  lightning-talk-gong:
+    command: bin/gong
+    extensions: [gnome-3-28]
+    plugs:
+      - opengl
+      - audio-playback
+    environment:
+      LD_LIBRARY_PATH: $SNAP/bin/lib:$LD_LIBRARY_PATH
+
+parts:
+  flutter:
+    plugin: nil
+    # clone via override-build to preserve git meta
+    override-build: |
+      set -eux
+      snapcraftctl build
+      git clone -b master https://github.com/flutter/flutter.git
+      flutter/bin/flutter config --enable-linux-desktop
+      cp -r flutter $SNAPCRAFT_PART_INSTALL/
+    build-packages:
+      - git
+      - unzip
+    prime:
+      - -flutter
+
+  lightning-talk-gong:
+    after: [flutter]
+    source: .
+    plugin: nil
+    override-build: |
+      set -eux
+      snapcraftctl build
+      $SNAPCRAFT_STAGE/flutter/bin/flutter pub get
+      $SNAPCRAFT_STAGE/flutter/bin/flutter build linux --release
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
+      cp -r build/linux/release/* $SNAPCRAFT_PART_INSTALL/bin/
+      cp $SNAPCRAFT_PART_INSTALL/../src/gong.wav $SNAPCRAFT_PART_INSTALL/
+      find /root/.pub-cache/ -name libunixdomainsocket.so -exec cp {} $SNAPCRAFT_PART_INSTALL/bin/lib/ \;
+    build-packages:
+      - clang
+    stage-packages:
+      - pulseaudio-utils
