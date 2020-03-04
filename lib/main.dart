@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:io';
 import 'package:dbus_client/dbus_client.dart';
 import 'package:flutter/material.dart';
 
@@ -86,7 +87,19 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  void gongSound() async {
+    Map<String, String> envVars = Platform.environment;
+    print(envVars['SNAP']);
+    print(envVars['PWD']);
+    if (Platform.environment.containsValue('SNAP')) {
+      Process.run('aplay', ['gong.wav'], workingDirectory: envVars['SNAP']).then((result) {
+        stdout.write(result.stdout);
+        stderr.write(result.stderr);
+      });
+    }
+  }
   void gong() async {
+    gongSound();
     var client = DBusClient.session();
     await client.connect();
     var hints = DBusDict(DBusSignature('s'), DBusSignature('v'));
