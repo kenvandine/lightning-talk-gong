@@ -94,8 +94,6 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void gongSound() async {
     Map<String, String> envVars = Platform.environment;
-    print(envVars['SNAP']);
-    print(envVars['PWD']);
 
     Process.run('paplay', ['gong.wav'], workingDirectory: envVars['SNAP']).then((ProcessResult results) {
       print(results.stdout);
