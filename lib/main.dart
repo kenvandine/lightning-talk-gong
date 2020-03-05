@@ -66,6 +66,11 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   void timerStart() {
+    if (timer != null && timer.isActive) {
+      print("timer is active, returning");
+      return;
+    }
+    print("timerStart");
     setState(() {
       startTime = DateTime.now();
     });
