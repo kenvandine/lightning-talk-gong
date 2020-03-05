@@ -34,6 +34,7 @@ parts:
     build-packages:
       - git
       - unzip
+      - curl
     prime:
       - -flutter
 
