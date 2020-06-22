@@ -12,7 +12,7 @@ architectures:
 
 apps:
   lightning-talk-gong:
-    command: bin/gong
+    command: bin/lightning_talk_gong
     extensions: [gnome-3-28]
     plugs:
       - opengl
@@ -22,37 +22,26 @@ apps:
       __EGL_VENDOR_LIBRARY_DIRS: $SNAP/usr/share/glvnd/egl_vendor.d/
 
 parts:
-  flutter:
-    plugin: nil
-    # clone via override-build to preserve git meta
-    override-build: |
-      set -eux
-      snapcraftctl build
-      git clone -b master https://github.com/flutter/flutter.git
-      flutter/bin/flutter config --enable-linux-desktop
-      cp -r flutter $SNAPCRAFT_PART_INSTALL/
-    build-packages:
-      - git
-      - unzip
-      - curl
-    prime:
-      - -flutter
-
   lightning-talk-gong:
-    after: [flutter]
     source: .
     plugin: nil
     override-build: |
       set -eux
-      snapcraftctl build
-      $SNAPCRAFT_STAGE/flutter/bin/flutter pub get
-      $SNAPCRAFT_STAGE/flutter/bin/flutter build linux --release
-      mkdir -p $SNAPCRAFT_PART_INSTALL/bin
-      cp -r build/linux/release/* $SNAPCRAFT_PART_INSTALL/bin/
+      flutter channel master
+      flutter upgrade
+      flutter config --enable-linux-desktop
+      flutter doctor
+      flutter pub get
+      flutter build linux --release -v
+      mkdir -p $SNAPCRAFT_PART_INSTALL/bin/lib
+      cp -r build/linux/release/bundle/* $SNAPCRAFT_PART_INSTALL/bin/
       cp $SNAPCRAFT_PART_INSTALL/../src/gong.wav $SNAPCRAFT_PART_INSTALL/
-      find /root/.pub-cache/ -name libunixdomainsocket.so -exec cp {} $SNAPCRAFT_PART_INSTALL/bin/lib/ \;
-    build-packages:
-      - clang
+      find /root/snap/flutter/common/flutter/.pub-cache/ -name libunixdomainsocket.so -exec cp {} $SNAPCRAFT_PART_INSTALL/bin/lib/ \;
+    build-snaps:
+      - flutter/latest/edge
+
+  libraries:
+    plugin: nil
     stage-packages:
       - pulseaudio-utils
       - libegl-mesa0
