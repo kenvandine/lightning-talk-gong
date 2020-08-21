@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:dbus_client/dbus_client.dart';
+import 'package:dbus/dbus.dart';
+import 'package:desktop_notifications/desktop_notifications.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -103,27 +104,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void gong() async {
     gongSound();
-    var client = DBusClient.session();
-    await client.connect();
-    var hints = DBusDict(DBusSignature('s'), DBusSignature('v'));
-    hints.add(DBusString('sound-name'), DBusVariant(DBusString('bell-terminal')));
-    var values = [
-      DBusString(''), // App name
-      DBusUint32(0), // Replaces
-      DBusString(''), // Icon
-      DBusString('The gong has gone bong, time to leave the stage!'), // Summary
-      DBusString(''), // Body
-      DBusArray(DBusSignature('s')), // Actions
-      hints, // Hints
-      DBusInt32(-1), // Expire timeout
-    ];
-    var result = await client.callMethod(
-        destination: 'org.freedesktop.Notifications',
-        path: '/org/freedesktop/Notifications',
-        interface: 'org.freedesktop.Notifications',
-        member: 'Notify',
-        values: values);
-    var id = (result[0] as DBusUint32).value;
-    debugPrint('notify $id');
+
+    var sessionBus = DBusClient.session();
+    var client = NotificationClient(sessionBus);
+    await client.notify('The gong has gone bong, time to leave the stage!');
+    await sessionBus.disconnect();
   }
 }
