@@ -24,17 +24,13 @@ apps:
 parts:
   lightning-talk-gong:
     source: .
-    plugin: nil
+    plugin: flutter
+    flutter-channel: master
+    flutter-target: lib/main.dart
     override-build: |
       set -eux
-      flutter channel master
-      flutter upgrade
-      flutter config --enable-linux-desktop
-      flutter doctor
-      flutter pub get
-      flutter build linux --release -v
+      snapcraftctl build
       mkdir -p $SNAPCRAFT_PART_INSTALL/bin/lib
-      cp -r build/linux/release/bundle/* $SNAPCRAFT_PART_INSTALL/bin/
       cp $SNAPCRAFT_PART_INSTALL/../src/gong.wav $SNAPCRAFT_PART_INSTALL/
       find /root/snap/flutter/common/flutter/.pub-cache/ -name libunixdomainsocket.so -exec cp {} $SNAPCRAFT_PART_INSTALL/bin/lib/ \;
     build-snaps:
