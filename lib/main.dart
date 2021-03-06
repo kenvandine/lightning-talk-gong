@@ -96,7 +96,8 @@ class _MyHomePageState extends State<MyHomePage> {
   void gongSound() async {
     Map<String, String> envVars = Platform.environment;
 
-    Process.run('paplay', ['gong.wav'], workingDirectory: envVars['SNAP']).then((ProcessResult results) {
+    Process.run('paplay', ['gong.wav'], workingDirectory: envVars['SNAP'])
+        .then((ProcessResult results) {
       print(results.stdout);
       print(results.stderr);
     });
@@ -108,6 +109,6 @@ class _MyHomePageState extends State<MyHomePage> {
     var sessionBus = DBusClient.session();
     var client = NotificationClient(sessionBus);
     await client.notify('The gong has gone bong, time to leave the stage!');
-    await sessionBus.disconnect();
+    await sessionBus.close();
   }
 }
