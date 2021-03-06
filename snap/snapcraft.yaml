@@ -34,4 +34,5 @@ parts:
     plugin: nil
     stage-packages:
       - pulseaudio-utils
-      - libegl-mesa0
+    prime:
+      - usr/bin/paplay
