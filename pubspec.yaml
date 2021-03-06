@@ -8,9 +8,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  cupertino_icons: ^0.1.2
-  dbus:
-  desktop_notifications:
+  desktop_notifications: ^0.2.0
 
 dev_dependencies:
   flutter_test:
